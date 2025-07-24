@@ -11,5 +11,9 @@ const chat = ai.chats.create({
 });
 
 export async function sendChatMessage(message: string) {
-    return chat.sendMessageStream({message: message });
+
+    const answer = await chat.sendMessage({message: message });
+
+    return answer.text;
+
 }

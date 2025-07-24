@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import styled from "styled-components"
-import { sendChatMessage } from "@/lib/SendMessage"
+import { sendChatMessage } from "@/lib/sendMessage"
+
 
 
 const StyledHeader = styled.h2`
@@ -35,17 +36,12 @@ export default function Chat() {
     const handleSubmit = async () => {
         try {
             const answer = await sendChatMessage(input);
-            let rollingResponse = '';
-            for await (const chunk of answer) {
-                rollingResponse += String(chunk.text);
-                setResponse(String(rollingResponse));
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-            }
-            catch (error) {
+            setResponse(String(answer));
+        }
+        catch (error) {
             console.log(error);
-            }
-            setInput('');
+        }
+        setInput('');
     };
 
 
@@ -53,14 +49,12 @@ export default function Chat() {
         <main>
             <StyledHeader>Projects</StyledHeader>
 
-            {/* There is missing some spacing between the numbers and the buttons that is there in the mp-1,
-            but I don't really know it isn't doing the same here. But other than that every thing is the same.
-            */}
+
             <StyledCalculator>
                 <div>
                     <input value={input} onChange={(e) => setInput(e.target.value)}/>
                     <StyledButton onClick={handleSubmit}>Send</StyledButton>
-                    <h3>{response}</h3>
+                    <h3>{String(response)}</h3>
                 </div>
             </StyledCalculator>
         </main>
