@@ -1,6 +1,8 @@
+"use client";
+
 import { useState } from "react";
 import styled from "styled-components"
-import { sendChatMessage} from "./SendMessage"
+import { sendChatMessage } from "@/lib/SendMessage"
 
 
 const StyledHeader = styled.h2`
@@ -15,6 +17,14 @@ const StyledCalculator = styled.div`
     flex-direction: column;
 `;
 
+const StyledButton = styled.button`
+    background-color: #3a4454;
+    color: white;
+    border: none;
+    padding: 8px 16px;  // Add padding
+    cursor: pointer;    // Show it's clickable
+    min-height: 40px;   // Ensure adequate height
+`
 
 
 
@@ -48,8 +58,8 @@ export default function Chat() {
             */}
             <StyledCalculator>
                 <div>
-                    <input onChange={(e) => setInput(e.target.value)}/>
-                    <button onClick={handleSubmit}>Send</button>
+                    <input value={input} onChange={(e) => setInput(e.target.value)}/>
+                    <StyledButton onClick={handleSubmit}>Send</StyledButton>
                     <h3>{response}</h3>
                 </div>
             </StyledCalculator>
