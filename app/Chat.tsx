@@ -1,45 +1,81 @@
 "use client";
 
-import { useState } from "react";
-import styled from "styled-components"
 import { sendChatMessage } from "@/lib/sendMessage"
+import React, { useState, useRef, useEffect } from 'react';
+import {
+    Box,
+    TextField,
+    IconButton,
+    Paper,
+    Typography,
+    Avatar,
+    Divider,
+    Container
+} from '@mui/material';
+import { Send as SendIcon, Person, SmartToy } from '@mui/icons-material';
+import styled from 'styled-components';
 
-
-
-const StyledHeader = styled.h2`
-    padding: 2%;
-    font-size: calc(4px + 1vh + 1vw);
-    margin-bottom: 6%;
+const MessagesContainer = styled(Box)`
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+  }
 `;
 
-
-const StyledCalculator = styled.div`
-    display: flex;
-    flex-direction: column;
+const MessageBubble = styled(Box)<{$isUser?:boolean}>`
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 8px;
+  ${(props) => props.$isUser && `
+    flex-direction: row-reverse;
+  `}
 `;
 
-const StyledButton = styled.button`
-    background-color: #3a4454;
-    color: white;
-    border: none;
-    padding: 8px 16px;  // Add padding
-    cursor: pointer;    // Show it's clickable
-    min-height: 40px;   // Ensure adequate height
-`
+const BubbleContent = styled(Paper)<{$isUser?:boolean}>`
+  max-width: 70%;
+  padding: 12px 16px !important;
+  border-radius: ${props => props.$isUser ? '18px 18px 4px 18px' : '18px 18px 18px 4px'} !important;
+  background: ${props => props.$isUser ? '#2196f3' : 'rgba(255, 255, 255, 0.95)'} !important;
+  color: ${props => props.$isUser ? 'white' : '#333'} !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+`;
 
+type ChatHistoryTemplate = {id:number, isUser:boolean, content:string, timestamp:string}
 
 
 export default function Chat() {
     const [input, setInput] = useState('');
     const [response, setResponse] = useState('');
+    const [messages, setMessages] = useState<ChatHistoryTemplate[]>([]);
 
     const handleSubmit = async () => {
         try {
+            setMessages(prev => [...prev, {id:Math.floor(Math.random() * 1_000_000_000), isUser:true, content:input, timestamp:"00"}]);
             const answer = await sendChatMessage(input);
             setResponse(String(answer));
         }
         catch (error) {
             console.log(error);
+        }
+        finally {
+            setMessages(prev => [...prev, {id:Math.floor(Math.random() * 1_000_000_000), isUser:false ,content:response, timestamp:"00"}]);
         }
         setInput('');
     };
@@ -47,16 +83,52 @@ export default function Chat() {
 
     return (
         <main>
-            <StyledHeader>Projects</StyledHeader>
-
-
-            <StyledCalculator>
-                <div>
-                    <input value={input} onChange={(e) => setInput(e.target.value)}/>
-                    <StyledButton onClick={handleSubmit}>Send</StyledButton>
-                    <h3>{String(response)}</h3>
-                </div>
-            </StyledCalculator>
+            {/* Messages */}
+            <MessagesContainer>
+                {messages.map((message) => (
+                    <MessageBubble key={message.id} $isUser={message.isUser}>
+                        <Avatar
+                            sx={{
+                                width: 32,
+                                height: 32,
+                                bgcolor: message.isUser ? '#2196f3' : '#f50057'
+                            }}
+                        >
+                            {message.isUser ? <Person /> : <SmartToy />}
+                        </Avatar>
+                        <Box>
+                            <BubbleContent $isUser={message.isUser} elevation={2}>
+                                <Typography variant="body1">
+                                    {message.content}
+                                </Typography>
+                            </BubbleContent>
+                            <Typography
+                                variant="caption"
+                                sx={{
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    ml: message.isUser ? 0 : 1,
+                                    mr: message.isUser ? 1 : 0,
+                                    display: 'block',
+                                    textAlign: message.isUser ? 'right' : 'left',
+                                    mt: 0.5
+                                }}
+                            >
+                                {message.timestamp}
+                            </Typography>
+                        </Box>
+                    </MessageBubble>
+                ))}
+            </MessagesContainer>
+            <div>
+                <input value={input} onChange={(e) => setInput(e.target.value)}/>
+                <IconButton onClick={handleSubmit} sx={{
+                    bgcolor: '#2196f3',
+                    color: 'white',
+                    '&:hover': {
+                        bgcolor: '#1976d2'
+                    }}}>Send</IconButton>
+                <h3>{response}</h3>
+            </div>
         </main>
     )
 }
