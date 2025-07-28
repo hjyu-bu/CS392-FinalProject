@@ -57,7 +57,7 @@ const BubbleContent = styled(Paper)<{$isUser?:boolean}>`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 `;
 
-type ChatHistoryTemplate = {id:number, isUser:boolean, content:string, timestamp:string}
+type ChatHistoryTemplate = {id:string, isUser:boolean, content:string, timestamp:string}
 
 
 export default function Chat() {
@@ -67,15 +67,13 @@ export default function Chat() {
 
     const handleSubmit = async () => {
         try {
-            setMessages(prev => [...prev, {id:Math.floor(Math.random() * 1_000_000_000), isUser:true, content:input, timestamp:"00"}]);
+            setMessages(prev => [...prev, {id:Date.now().toString() + Math.random().toString(), isUser:true, content:input, timestamp:"00"}]);
             const answer = await sendChatMessage(input);
             setResponse(String(answer));
+            setMessages(prev => [...prev, {id:Date.now().toString() + Math.random().toString(), isUser:false ,content:String(answer), timestamp:"00"}]);
         }
         catch (error) {
             console.log(error);
-        }
-        finally {
-            setMessages(prev => [...prev, {id:Math.floor(Math.random() * 1_000_000_000), isUser:false ,content:response, timestamp:"00"}]);
         }
         setInput('');
     };
