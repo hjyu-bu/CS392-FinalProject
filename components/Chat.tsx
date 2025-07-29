@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import { Send as SendIcon, Person, SmartToy } from '@mui/icons-material';
 import styled from 'styled-components';
+import { ChatHistoryTemplate } from "@/types";
+import { v4 as uuidv4 } from 'uuid';
 
 const MessagesContainer = styled(Box)`
   flex: 1;
@@ -57,20 +59,18 @@ const BubbleContent = styled(Paper)<{$isUser?:boolean}>`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 `;
 
-type ChatHistoryTemplate = {id:string, isUser:boolean, content:string, timestamp:string}
 
-
-export default function Chat() {
+export default function Chat({initialMessage}:{initialMessage:ChatHistoryTemplate[]}) {
     const [input, setInput] = useState('');
     const [response, setResponse] = useState('');
-    const [messages, setMessages] = useState<ChatHistoryTemplate[]>([]);
+    const [messages, setMessages] = useState<ChatHistoryTemplate[]>(initialMessage);
 
     const handleSubmit = async () => {
         try {
-            setMessages(prev => [...prev, {id:Date.now().toString() + Math.random().toString(), isUser:true, content:input, timestamp:"00"}]);
+            setMessages(prev => [...prev, {id:uuidv4(), isUser:true, content:input, timestamp:Date.now().toString()}]);
             const answer = await sendChatMessage(input);
             setResponse(String(answer));
-            setMessages(prev => [...prev, {id:Date.now().toString() + Math.random().toString(), isUser:false ,content:String(answer), timestamp:"00"}]);
+            setMessages(prev => [...prev, {id:uuidv4(), isUser:false ,content:String(answer), timestamp:Date.now().toString()}]);
         }
         catch (error) {
             console.log(error);
