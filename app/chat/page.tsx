@@ -1,3 +1,11 @@
+/*
+ This page was done by Adam and Hanjun.
+ Functionality: Mostly done by Adam with help from Hanjun
+
+ Styling: Done by Hanjun
+
+ */
+
 "use client";
 import {sendChatMessage} from "@/lib/sendMessage";
 import React, {useEffect, useState, useRef} from "react";
@@ -7,6 +15,8 @@ import { v4 as uuidv4 } from 'uuid';
 import MessagesContainer from "@/components/MessagesContainer";
 import SendIcon from '@mui/icons-material/Send';
 
+// Decode URI component using base64 encoding-decoding
+// We wanted to hide that the message input is being sent through URLs, so we decided to encode the message input!
 function decodeBase64(base64: string | null): string {
     if (!base64) return "Query not provided. Please ask the user to provide a description of their AI!";
     const binary = atob(base64);
@@ -14,7 +24,7 @@ function decodeBase64(base64: string | null): string {
     return new TextDecoder().decode(bytes);
 }
 
-
+// This is the main chat page.
 export default function ChatPage() {
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);

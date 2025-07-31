@@ -1,9 +1,10 @@
+// Done by Adam
 import Link from "next/link";
 
 
 export default function Header() {
     return (
-        <header className="bg-purple-800 text-white text-center p-4">
+        <header className="bg-purple-800 text-white text-center p-4 sticky top-0">
             <Link href="/" className="text-5xl hover:text-gray-300">
                 AI Chatbot
             </Link>
