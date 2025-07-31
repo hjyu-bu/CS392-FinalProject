@@ -3,6 +3,12 @@ import { SmartToy } from '@mui/icons-material';
 import { ChatHistoryTemplate } from "@/types";
 import MessageBubble from "@/components/MessageBubble";
 
+/*
+    This component is a container for all message bubbles.
+    We will receive a list of messages and map over them, using MessageBubble component for each.
+    isTyping essentially holds the 'loading' state for AI responses, and will show a loading animation while
+    the user waits for the AI to generate a response.
+ */
 export default function MessagesContainer({messages, isTyping}:{messages:ChatHistoryTemplate[], isTyping:boolean}) {
 
     return (

@@ -1,9 +1,7 @@
 /*
  This page was done by Adam and Hanjun.
  Functionality: Mostly done by Adam with help from Hanjun
-
  Styling: Done by Hanjun
-
  */
 
 "use client";
@@ -15,8 +13,11 @@ import { v4 as uuidv4 } from 'uuid';
 import MessagesContainer from "@/components/MessagesContainer";
 import SendIcon from '@mui/icons-material/Send';
 
-// Decode URI component using base64 encoding-decoding
-// We wanted to hide that the message input is being sent through URLs, so we decided to encode the message input!
+/*
+    Decode URI component using base64 encoding-decoding
+    We wanted to hide the fact that the initial description of AI is being sent through URLs,
+    so we decided to encode the initial description.
+ */
 function decodeBase64(base64: string | null): string {
     if (!base64) return "Query not provided. Please ask the user to provide a description of their AI!";
     const binary = atob(base64);
@@ -24,7 +25,11 @@ function decodeBase64(base64: string | null): string {
     return new TextDecoder().decode(bytes);
 }
 
-// This is the main chat page.
+/*
+    This is the main chat page.
+    It contains the message container(which displays messages) and the input area.
+    It also sends api requests to Gemini using server-side functions.
+ */
 export default function ChatPage() {
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -35,6 +40,10 @@ export default function ChatPage() {
     const initialQuery = decodeBase64(searchParams.get('query'));
     const hasProcessedInitialQuery = useRef(false);
 
+    /*
+        Using the initial description user provided, sends an api call to gemini and generates an initial response.
+        useEffect to call asynchronous server functions, with hasProcessedInitialQuery ref to make sure that this only happens once.
+     */
     useEffect(() => {
         const processInitialQuery = async () => {
             if (initialQuery && !hasProcessedInitialQuery.current) {
@@ -84,6 +93,11 @@ export default function ChatPage() {
         }
     }
 
+    /*
+        Messages and input-area are in a flex-box, with input sticky to the bottom of the screen.
+        Input-area is also another flex-box, with decorated textarea and button(also with MUI icon!).
+        Utilizes onKeyDown for enter-triggered button pushing.
+     */
     return (
         <div className="flex flex-col h-screen">
             <MessagesContainer messages={messages} isTyping={isTyping}/>

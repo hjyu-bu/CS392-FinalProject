@@ -1,5 +1,6 @@
 // Done by Hanjun
 
+// An animated loading page for /chat
 export default function Loading() {
     return (
         <div className="animate-pulse-custom flex flex-col items-center justify-center gap-4 text-center">

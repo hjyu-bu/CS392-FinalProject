@@ -1,9 +1,7 @@
 /*
     This page was done by Adam and Hanjun.
     Functionality: Done by Hanjun
-
     Styling: Done by Adam
-
  */
 
 "use client";
@@ -11,17 +9,31 @@ import {useState} from "react";
 import {TextField, Button} from "@mui/material";
 import {useRouter} from "next/navigation";
 
+/*
+    Encode URI component using base64 encoding-decoding
+    We wanted to hide the fact that the initial description of AI is being sent through URLs,
+    so we decided to encode the initial description.
+ */
 function encodeBase64(str: string): string {
     const bytes = new TextEncoder().encode(str);
     return btoa(String.fromCharCode(...bytes));
 }
 
+/*
+    This is the home page.
+    It has an input area where the user can write description for the AI that they want to create!
+    The description will then be encoded and sent to /chat page.
+ */
 export default function Home() {
     const [input, setInput] = useState('');
     const [error, setError] = useState('');
     const prefix = "RESTART. THE USER WILL GIVE YOU A NEW DESCRIPTION. HERE IS THE DESCRIPTION:\n";
     const router = useRouter();
 
+    /*
+        Instead of Link, we used useRouter since we wanted to do a simple verification of user input.
+        If the user sends an empty or too short description, it will notify the user to write longer descriptions.
+     */
     const handleClick = () => {
         if (!input.trim()) {
             setError("Please enter a description for your AI!");
@@ -51,10 +63,6 @@ export default function Home() {
                                    if (e.key === 'Enter' && !e.shiftKey) {
                                        e.preventDefault();
                                        handleClick();
-                                   }
-                                   else if (e.key === 'Enter' && e.shiftKey) {
-                                       e.preventDefault();
-                                       setInput(input + '\n');
                                    }
                                }}
                                className="w-full p-4 bg-violet-50 rounded-xl border-violet-200 text-violet-900 placeholder-violet-400"

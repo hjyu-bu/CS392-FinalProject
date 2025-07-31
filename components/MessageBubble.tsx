@@ -2,6 +2,13 @@
 import {ChatHistoryTemplate} from "@/types";
 import { Person, SmartToy } from '@mui/icons-material';
 
+/*
+    This component will display a single message.
+    Each message bubble has an Avatar and a box for content, in a flex-box.
+    For the user-written message, a person avatar is used, with everything right(end)-aligned.
+    For AI-generated message, a toy avatar is used, with everything left-aligned.
+    The color template also gets inversed.
+ */
 export default function MessageBubble({message}:{message:ChatHistoryTemplate}) {
     return (
         <div>
