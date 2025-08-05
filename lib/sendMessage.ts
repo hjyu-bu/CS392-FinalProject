@@ -1,9 +1,18 @@
-// Done by Adam
+/* Done by Adam
+This script uses server-side handling to initialize the chat instance using the Gemini API
+ */
 "use server";
 
 import { GoogleGenAI } from "@google/genai";
 
+// Sets API key
 const ai = new GoogleGenAI({apiKey:process.env.GEMINI_API_KEY});
+
+/*
+Creates the chat, the systemInstruction tells the AI to take the first message from the user as its input.
+We wanted the user to be able to set the systemInstruction directly dynamically, but with how server-side and client-side
+scripts work together, it was a bit problematic to do that. So this solution was satisfactory for our needs
+ */
 const chat = ai.chats.create({
     model: "gemini-2.5-flash-lite",
     config: {
@@ -20,7 +29,10 @@ const chat = ai.chats.create({
     },
 });
 
-
+/*
+This function receives the message input from the user, sends it to the AI model with  chat.sendMessage,
+then returns the text response of the chat model.
+ */
 export async function sendChatMessage(message: string) {
 
 

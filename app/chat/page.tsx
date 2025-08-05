@@ -70,6 +70,12 @@ export default function ChatPage() {
         processInitialQuery();
     }, [initialQuery]);
 
+    /*
+        handeSubmit handles the submission of user messages and receives the AI model's response.
+        It validates that the input is not empty, then adds the new message to message history. This is used for displaying the earlier chats.
+        It sends the new message through the sendChatMessage function and sets adds the response to the chat history.
+        There is also an error handler, and it resets the input after, so the input field is empty.
+     */
     const handleSubmit = async () => {
         if (!input.trim()) return;
         setIsTyping(true);

@@ -49,11 +49,14 @@ export default function Home() {
         router.push(`/chat?query=${encodeURIComponent(encodeBase64(prefix + input.trim()))}`);
     }
 
+    /*
+    Renders the home page, where the user can set the AI model description.
+     */
     return (
     <main className="flex flex-col pt-50">
         <div className="w-[60%] m-auto bg-white border-1 border-violet-200 shadow-lg">
             <div className=" m-auto p-4 flex flex-col justify-center">
-                <div className="flex flex-col items-center space-x-3">
+                <div className="flex flex-col items-center">
                     <h1 className="pb-4 text-2xl">Describe your Artificial Intelligence!</h1>
                     <TextField multiline
                                placeholder={"e.g. You are a lovely cat!"}
@@ -83,9 +86,11 @@ export default function Home() {
                         Chat
                     </Button>
                 </div>
+                <h1 className="text-center text-red-500 text-xl font-bold my-5">
+                    {error}
+                </h1>
             </div>
         </div>
-        <h1>{error}</h1>
     </main>
     );
 }
